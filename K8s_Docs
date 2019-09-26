@@ -42,3 +42,23 @@ case it happens to be Docker.
 And finally kubelet is the agent that runs on each node in the cluster. The agent is
 responsible for making sure that the containers are running on the nodes as
 expected.
+
+Ques - How One become master and other become server?
+Ans - To be a Master you need following powers
+   kub-apiserver 
+   etcd
+   controller
+   scheduler
+   The worker node (or minion) as it is also known, is were the containers are hosted. 
+   To be a worker you need
+    kubelet - that is responsible for interacting with the master to provide health information of the worker node and carry out
+    actions requested by the master on the worker nodes. 
+    Controller Runtime - its run docker container here we use DOCKER
+    
+    
+Setup K8s
+  brew install kubectl
+  Download VirtualBox @ virtualbox.org
+  brew cask install minikube
+  minikube start
+  minikube status
