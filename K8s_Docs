@@ -1,0 +1,21 @@
+##To install docker
+brew install docker
+
+K8s Architecture:
+Node - it is a machine physical or virtual machine on which k8s is installed it is a worker machine and this is where 
+the containers will be launched
+Also known as Minion
+
+Problem - what if node fails ?
+Ans - the application on that node also fails
+Soln - have multiple Node or Cluster
+
+What is Cluster?
+It is a group on Node .. or a set of Node and on each node your application is runing
+it also helps in load sharing among different nodes
+
+Problem - who will manage this cluster means who will decide how many node are up and report when a node fails then
+how it move workload from one node to other
+Soln- Master it is just another node with configuration information and its responsible for orchestration of container on
+the worker nodes.
+
