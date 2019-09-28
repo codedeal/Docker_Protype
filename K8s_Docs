@@ -83,3 +83,42 @@ Setup K8s
   what if M reaches maximum limit you will add more nodes
   
   1 Kubernetes Cluster = N Nodes
+  
+But sometimes you might have a scenario were you have a helper container,
+that might be doing some kind of supporting task for our web application such as
+processing a user entered data, processing a file uploaded by the user etc. and you
+want these helper containers to live along side your application container.
+
+
+How To Deploy PODS
+ kubectl run 
+ this command deploy the docker container by creating a POD menas that it first
+ create a POD and then deploy docker image from it
+ Q.Where it get the image?.
+ A.form docker hub where various application images are stored
+ ex: kubectl run ngnix --image nginx
+ Q.how we know list of pods and its detail
+ kubectl get pods
+ kubectl describe pods
+ Q.Expose ngnix App Outside of the Cluster in a URL
+ 
+ Summarize What we learnt:
+ 
+A Pod is a Kubernetes abstraction that represents a group of one or more application containers (such as Docker or rkt) and some shared resources for those containers. Those resources include:
+Shared storage, as volumes.
+Networking, as a unique cluster IP address.
+Information about how to run each container, such as the container image version or specific ports to use.
+
+A Pod always runs on a Node. As discussed earlier, Node is a nothing but a worker machine in Kubernetes and may be either a virtual or a physical machine, depending on the cluster. Each Node is managed by the Master. A Node can have multiple pods, and the Kubernetes master automatically handles scheduling the pods across the Nodes in the cluster. The Master’s automatic scheduling takes into account the available resources on each Node.
+
+Every Kubernetes Node runs at least:
+
+kubelet – responsible for communication between the Kubernetes Master and the Nodes
+Container runtime (Docker, rkt)
+
+Here are some useful kubectl commands:
+
+kubectl get– list resources
+kubectl describe– show detailed information about a resource
+kubectl logs– print the logs from a container in a pod
+kubectl exec– execute a command on a container in a pod
