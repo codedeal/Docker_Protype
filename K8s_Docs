@@ -62,3 +62,24 @@ Setup K8s
   brew cask install minikube
   minikube start
   minikube status
+  
+  Q: What is Minikube
+  
+  
+  Q:What is POD
+  
+  in k8s we want do deploy our applications into worker nodes form of container in various nodes but containers cant be deployed directly into 
+  worker nodes they need to be encapsulated in k8 objects knows as POD
+  POD is smallest instance in k8s
+  
+  Now Lets suppose you have a single instance of your application running inside docker container encapslated inside POD in a single NODE
+  what if Load increase -> Would you add mulitiple instance of application inside same pod
+  NO POD follows ONE-ONE relationship which means that ONE POD ->ONE Container -> One instance of application instead you will
+  create another pod within same node 
+  so 1 Node= M*Pods where M is limit of a maxmium POD a node can handle
+     1 Pod = 1 Container
+     1 Container = Single Instace of application
+     
+  what if M reaches maximum limit you will add more nodes
+  
+  1 Kubernetes Cluster = N Nodes
