@@ -100,6 +100,8 @@ How To Deploy PODS
  Q.how we know list of pods and its detail
  kubectl get pods
  kubectl describe pods
+ kubectl get pods -o wide - describe its IP address assigned to it note that each pods gets its own IP
+  
  Q.Expose ngnix App Outside of the Cluster in a URL
  
  Summarize What we learnt:
