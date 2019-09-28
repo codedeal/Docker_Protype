@@ -1,0 +1,28 @@
+What is YAML
+YAML -> yet another markup language
+
+XML(Tree Architecture)
+<Servers>
+<Server>
+<name>Server1</name>
+<owner>John</owner>
+<status>active</status>
+</Server>
+</Servers>
+
+JSON [Dictionary Architecture]
+{
+  Servers:
+  [
+  {
+    name:Server1
+    owner:John
+    status:active
+  }
+  ]
+}
+YAML
+   Servers:
+    - name: Server1
+      owner:John
+      status:active
