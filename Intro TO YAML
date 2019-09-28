@@ -26,3 +26,36 @@ YAML
     - name: Server1
       owner:John
       status:active
+
+YAML as 
+-key Value Pair
+  Fruit: Apple
+  Vegetable: Carrot
+  Meat: Fish
+  Liquid: Coke
+- LIST
+  Fruits:
+  - Orange
+  - Apple
+  - Banana
+  Vegetable:
+  - Carrot
+  - Raddish
+  - Onion
+MAP
+ Banana:
+      Calories: 105
+      Fat: 0.4g
+      Carbs: 27g
+      
+ DICTIONARY VS LIST VS LIST of DICTIONARY -- When to use
+A car is a single object and it has properties such as color, model, transition and price, to store different
+information or properties of a single object. We use a dictionary in this simple dictionary.
+
+but now we need to split model into further details like modelname ,year In this case the single value of model is now replaced by a small dictionary with two properties name
+So this is a dictionary within another dictionary.
+
+Now we have six car we use List of Cars
+
+if we want to store information about each car so we turn list inot list of dictionaries
+ 
