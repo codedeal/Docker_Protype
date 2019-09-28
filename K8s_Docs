@@ -124,3 +124,39 @@ kubectl get– list resources
 kubectl describe– show detailed information about a resource
 kubectl logs– print the logs from a container in a pod
 kubectl exec– execute a command on a container in a pod
+
+
+YAML in k8s
+apiVersion: v1
+Kind: Pod
+metadata:
+   name: myapp-pod
+   labels:
+      app: myapp
+spec:
+
+apiVersion:- This is the version of the kubernetes API we’re using to create the object. 
+Depending on what we are trying to create we must use the RIGHT apiVersion. For now since we are working on
+PODs, we will set the apiVersion as v1. Few other possible values for this field are
+apps/v1beta1, extensions/v1beta1 etc
+=========================================================
+Kind- refers to the type of object we are trying to create, which in
+this case happens to be a POD. So we will set it as Pod. Some other possible values
+here could be ReplicaSet or Deployment or Service,
+==========================================================
+Metadata:- The metadata is data about the object like its name, labels etc.
+As you can see unlike the first two were you specified a string value, this, is in the
+form of a dictionary. So everything under metadata is intended to the right a little bit
+and so names and labels are children of metadata.
+===========================================================
+SPEC:- Depends on the object we are going to create, this is were we provide additional information to
+kubernetes pertaining to that object.Spec is a dictionary so add a property under it called containers, which is a list
+or an array. The reason this property is a list is because the PODs can have multiple
+containers within them
+
+Note there are 4 Kind in k8s
+Kind              Versions
+POD                  v1
+SERVICE              v1
+REPLICASET           apps/v1
+DEPLOYMENT           apps/v1   
