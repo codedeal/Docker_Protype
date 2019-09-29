@@ -160,3 +160,20 @@ POD                  v1
 SERVICE              v1
 REPLICASET           apps/v1
 DEPLOYMENT           apps/v1   
+
+
+You can create yaml online on this cool site https://codebeautify.org/yaml-validator
+
+apiVersion: v1
+Kind: Pod
+metadata: 
+    name: myapp-pod
+    labels:
+        app: myapp
+spec: 
+    containers: 
+        - name: nginx-container
+          image: nginx
+          
+          
+          
