@@ -124,6 +124,7 @@ kubectl get– list resources
 kubectl describe– show detailed information about a resource
 kubectl logs– print the logs from a container in a pod
 kubectl exec– execute a command on a container in a pod
+kubectl delete pod pod-name
 
 
 YAML in k8s
@@ -254,7 +255,29 @@ spec:   # spec for Replica Set
   
   kuectl create -f replicaset-definiton.yml
   kubectl get replicaset
+  kubectl describe replicaset
   kubectl delete replicaset myapp-replicaset
   kubectl replace -f replicaset-definition.yml
   kubectl scale -replicas=6 -f replicaset-d
   
+  
+  Note here carefully
+    kuectl create -f replicaset-definiton.yml
+    it will create n number of pods suppose n= 3
+    NAME                     READY   STATUS    RESTARTS   AGE
+myapp-replicaset-7pn46   1/1     Running   0          13s
+myapp-replicaset-glwxj   1/1     Running   0          2m2s
+myapp-replicaset-r745t   1/1     Running   0          2m2s
+
+Q:What if I delete any one pod kubectl delete pod myapp-replicaset-7pn46
+A: The replicaset will notice it will terminate this pod but as per specification it will start a
+new pod so that n=3 maintained
+
+Q:what if you create a new pod with kubectl create -f pod-def.yml with same label
+A: Replica Controller will notice it and check label of pod
+
+         if(label_of_new_pod.Equals(label_of_pod_Replicaset))
+            delete_that_new_pod
+            else
+            create_that_new_pod
+
