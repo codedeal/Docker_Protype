@@ -365,18 +365,6 @@ together with other applications or users This type of service is known as a
 NodePort service because the service listens to a port on the Node and forwards
 requests to PODs. 
 
-User -> Service->POD
-======================================================================================
-
-The first one is what we discussed already – NodePort were the service makes an
-internal POD accessible on a Port on the Node. The second is ClusterIP – and in this
-case the service creates a virtual IP inside the cluster to enable communication
-between different services such as a set of front-end servers to a set of backendservers. The third type is a LoadBalancer, were it provisions a load balancer for our
-service in supported cloud providers. A good example of that would be to distribute
-load across different web servers
-The kubernetes service is an object just like PODs, Replicaset or Deployments that we worked with before. One of
-its use case is to listen to a port on the Node and forward requests on that port to a
-port on the POD running the web application
 For example, our application has groups of PODs running various sections, such as a group for serving front-end load to users,
 another group running back-end processes, and a third group connecting to an
 external data source. It is Services that enable connectivity between these groups of
@@ -384,6 +372,51 @@ PODs. Services enable the front-end application to be made available to users, i
 helps communication between back-end and front-end PODs, and helps in
 establishing connectivity to an external data source. Thus services enable loose
 coupling between microservices in our application
+User -> Service->POD
+======================================================================================
+
+The first one is what we discussed already – NodePort were the service makes an
+internal POD accessible on a Port on the Node. 
+The second is ClusterIP – and in this case the service creates a virtual IP inside
+the cluster to enable communication between different services such as a set of front-end servers 
+to a set of backendservers. 
+The third type is a LoadBalancer, were it provisions a load balancer for our
+service in supported cloud providers. A good example of that would be to distribute
+load across different web servers
+The kubernetes service is an object just like PODs, Replicaset or Deployments that we worked with before. One of
+its use case is to listen to a port on the Node and forward requests on that port to a
+port on the POD running the web application
+
+--- 
+apiVersion: v1
+kind: Service
+metadata: 
+  name: myapp-service
+spec: 
+    type: NodePort
+    ports:
+        - targetPort: 80
+          port: 80
+          nodePort: 300008
+    selector:
+        app: myapp
+        type: front-end
+
+In the spec section of a service we have type and ports. The type refers to
+the type of service we are creating. As discussed before it could be ClusterIP,
+NodePort, or LoadBalancer
+
+The first type of port is the targetPort, which we will set to 80. 
+The next one is simply port, which is the port on the service object and we will set that to 80 as well. 
+The third is NodePort which we will set in bewtween 30000 to 32767 or any number in the valid range
+
+Q: How we Connect Service to POD there could be 100 of POD
+A: We will use labels and selector
+
+Commands 
+kubectl create -f service-definition.yml
+kubectl get services
+curl http://192.168.X.X
 
 Basic Of Networking in k8s:
 How networking works in k8s is different for minikube and OS so lets take a simple example
