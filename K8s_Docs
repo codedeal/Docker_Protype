@@ -280,4 +280,121 @@ A: Replica Controller will notice it and check label of pod
             delete_that_new_pod
             else
             create_that_new_pod
+            
+Deployments:
+Let us assume that you have a web server that needs to be deployed in a
+production environment. You need not ONE, but many such instances of the web
+server running for obvious reasons.
+Secondly, when newer versions of application builds become available on the docker
+registry, you would like to UPGRADE your docker instances seamlessly.
+However, when you upgrade your instances, you do not want to upgrade all of them
+at once as we just did. This may impact users accessing our applications, so you may
+want to upgrade them one after the other. And that kind of upgrade is known as
+Rolling Updates.
+Suppose one of the upgrades you performed resulted in an unexpected error and you
+are asked to undo the recent update. You would like to be able to rollBACK the
+changes that were recently carried out.
+
+
+Commands to note here:
+kubectl create -f deployment-definiton.yml # create deployment 
+kubectl get dployments 
+kubectl get replicaset
+kubectl get pods
+
+Observe the flow and remember Deployment create replicaset which create pods SO Dep->Rep->Pod
+
+apiVersion: v1
+kind: Deployment
+   metadata: 
+       name: myapp-replicaset
+       labels:
+           app: myapp
+           type: front-end
+   spec:   # spec for Replica Set
+       - template: # every template is a new POD
+           metadata: 
+            name: myapp-pod
+            labels:
+               app: myapp
+               type: front-end
+           spec: 
+               containers: 
+               - name: nginx-container
+                 image: nginx
+         replicas: 3    
+         selector:
+           matchLabels:
+               type: front-end
+                
+To See all Created Object at ONCE(Like history of k8s)
+kubectl get all
+
+In practical scenario you would be creating this deployment-definition file
+
+Deloyment Stratergy - Rolling Update
+Whenever you create a new deployment or upgrade the images in an existing deployment 
+it triggers a Rollout.
+A rollout is the process of gradually deploying or upgrading your application containers
+
+There are two types of deployment strategies. Say for example you have 5 replicas of
+your web application instance deployed. One way to upgrade these to a newer
+version is to destroy all of these and then create newer versions of application
+instances. Meaning first, destroy the 5 running instances and then deploy 5 new
+instances of the new application version it's called Recreate stratergy
+
+Problem: The problem with this as you can imagine, is that during the period after 
+the older versions are down and before any newer version is up, the application is down and inaccessible to users.
+
+The second strategy is were we do not destroy all of them at once. Instead we take
+down the older version and bring up a newer version one by one. This way the
+application never goes down and the upgrade is seamless. called Rolling Update Stratergy
+Command : kubectl rollout status deployment/myapp-deploymnent
+
+RollingUpdate is the default Deployment Strategy
+
+Commands
+kubectl rollout status deployment/myapp-replicaset # it show the status of deployment whether it is
+completed or still some of them need to be deployed
+kubectl rollout history deployment/myapp-replicaset 
+======================================================================================
+Services:
+Kubernetes Services enable communication between various components within and
+outside of the application. Kubernetes Services helps us connect applications
+together with other applications or users This type of service is known as a
+NodePort service because the service listens to a port on the Node and forwards
+requests to PODs. 
+
+User -> Service->POD
+======================================================================================
+
+The first one is what we discussed already – NodePort were the service makes an
+internal POD accessible on a Port on the Node. The second is ClusterIP – and in this
+case the service creates a virtual IP inside the cluster to enable communication
+between different services such as a set of front-end servers to a set of backendservers. The third type is a LoadBalancer, were it provisions a load balancer for our
+service in supported cloud providers. A good example of that would be to distribute
+load across different web servers
+The kubernetes service is an object just like PODs, Replicaset or Deployments that we worked with before. One of
+its use case is to listen to a port on the Node and forward requests on that port to a
+port on the POD running the web application
+For example, our application has groups of PODs running various sections, such as a group for serving front-end load to users,
+another group running back-end processes, and a third group connecting to an
+external data source. It is Services that enable connectivity between these groups of
+PODs. Services enable the front-end application to be made available to users, it
+helps communication between back-end and front-end PODs, and helps in
+establishing connectivity to an external data source. Thus services enable loose
+coupling between microservices in our application
+
+Basic Of Networking in k8s:
+How networking works in k8s is different for minikube and OS so lets take a simple example
+Let assume you have a cluster with single Node N1 with ip 192.168.1.2 this Node N contain a pod
+P1 and we know a POD have a ccontainer but as we see in docker here IP is not assigned to continers 
+but to POD so Let this Node N1 have Pods P1,P2,P3 with following IP 10.244.0.2 10.244.0.4 10.244.0.3
+and these POD communicate with each other using the following IP
+
+
+
+
+
+
 
