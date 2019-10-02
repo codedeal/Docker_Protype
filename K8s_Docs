@@ -417,7 +417,37 @@ Commands
 kubectl create -f service-definition.yml
 kubectl get services
 curl http://192.168.X.X
+=================================================================================================
+The second type of service is Cluster IP: but why we need this?
+In a full stack web application we have different sets of pods handling differnet part of application.
+Let's us assume a Web application Xerox has four parts front-end -F ,backend- B , redis(for key value)-R,databse-D
 
+Problem 1:all parts F,B,R,D need to communicate with each other
+
+Problem 2: F,B,R,D have their own set of Pods F(x1,x2,x3) B(p1,p2,p3),R(y1,y2,y3),D(z1,z2,z3)
+These PODs all have an IP address assigned to them  But these Ips as we know are not static
+these PODs can go down anytime and new PODs are created all the time so you CANNOT rely on these IP addresses for internal
+communication within the application.
+
+Problem 3: If pod x1 from F need to communicate with pod of D which pod it should connect z1,z2 or z3 who will make this decision
+===========================================================================================
+Solution: A kubernetes service can help us group these PODs together and provide a single
+interface to access the PODs in a group.
+
+For example: 
+a service created for the backend(B) PODs will help group all 
+the backend PODs(p1,p2,p3) together and provide a single
+interface(or point of contact) for other PODs to access this service. 
+The requests are forwarded to one of the PODs under the service randomly
+Similarly, create additional services for Redis and allow the backend PODs to access
+the redis system through this service. This enables us to easily and effectively
+deploy a microservices based application on kubernetes cluster
+
+Each layer can now scale or move as required without impacting
+communication between the various services. Each service gets an IP and name
+assigned to it inside the cluster and that is the name that should be used by other
+PODs to access the service. This type of service is known as ClusterIP. 
+==================================================================================================
 Basic Of Networking in k8s:
 How networking works in k8s is different for minikube and OS so lets take a simple example
 Let assume you have a cluster with single Node N1 with ip 192.168.1.2 this Node N contain a pod
