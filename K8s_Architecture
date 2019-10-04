@@ -44,3 +44,12 @@ expected.
 
 Note: An additional component on the Node is the kube-proxy. It takes care of networking
 within Kubernetes.
+
+Q. Among all these which are part of Master Node and which are of worker node?
+
+Worker Node                                                 Master Node
+Container Runtime (docker)                                  Kube-api server which interact with kubelet of worker node
+
+Kubelet: it interact with master kube api server            etcd,controller,scheduler all are parts of master ndoe
+
+
