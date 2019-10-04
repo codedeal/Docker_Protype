@@ -1,0 +1,46 @@
+Node  - is machine virtual/physical on which k8s is installed
+      - containers are hosted here
+      
+Cluster - it is a set of Nodes{N1,N2,N3---Nn}
+
+Q:Why we need cluster is one node not enough?
+A:if the node on which our application is running fails? Well, obviously our
+application goes down. So you need to have more than one nodes for high availability
+and scaling
+
+
+Q:How Cluster is managed means there are N number of nodes who montiors node?
+A: Master node come as a supervisior it his resposbility to watch
+over the nodes in the cluster and is responsible for the actual orchestration of
+containers on the worker nodes. 
+
+
+Q:What is the Architecture of k8s
+A: it consist of following components:
+1.API server : it  acts as the front-end for kubernetes. The users, management devices,
+Command line interfaces all talk to the API server to interact with the kubernetes
+cluster.
+
+2.ETCD key store:  ETCD is a distributed reliable key-value store used by
+kubernetes to store all data used to manage the cluster. Think of it this way, when you
+have multiple nodes and multiple masters in your cluster, etcd stores all that
+information on all the nodes in the cluster in a distributed manner. ETCD is
+responsible for implementing locks within the cluster to ensure there are no conflicts
+between the Masters. 
+
+3.Scheduler: It is responsible for distributing work or containers across multiple
+nodes. It looks for newly created containers and assigns them to Nodes. 
+
+4.Controllers: The controllers are the brain behind orchestration. They are responsible for noticing
+and responding when nodes, containers or endpoints goes down. The controllers
+makes decisions to bring up new containers in such cases.
+
+5.Container Runtime: It is the underlying software that is used to run containers. In our
+case it happens to be Docker. 
+
+6.Kubelet: It is the agent that runs on each node in the cluster. The agent is
+responsible for making sure that the containers are running on the nodes as
+expected. 
+
+Note: An additional component on the Node is the kube-proxy. It takes care of networking
+within Kubernetes.
