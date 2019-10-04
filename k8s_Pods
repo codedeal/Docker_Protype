@@ -1,0 +1,15 @@
+Pods
+
+The containers are encapsulated into a Kubernetes object
+known as PODs. A POD is a single instance of an application. 
+A POD is the smallest object, that you can create in kubernetes. 
+
+One Pod - One containers (1to1 relationship)is what prefered but you can have helper contianers
+To Scale up - add new pods
+To Scale down - delete new pods
+if Node capicity reached we add new node
+
+A Pod can have additional container must it must be not of same kind 
+means a helper container
+
+Two contianer talk to each other using network
