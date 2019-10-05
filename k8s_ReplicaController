@@ -41,7 +41,7 @@ spec:   # spec for Replication Center
             - name: nginx-container
               image: nginx
        - replicas: 3        
-       
+       # rembember that template and replicas field are sibilings
        
   ReplicaSet
   
