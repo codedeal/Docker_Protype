@@ -1,15 +1,72 @@
-Q:Why we need replica
-A:Let's assume that we have a single POD running our application.
-What if for some reason our application crashes and the POD fails?
+Replication Center -> why we need it
+Reason 1
+Let us assume that we have a single POD running our application. What if for some
+reason, our application crashes and the POD fails? Users will no longer be able to
+access our application. To prevent users from losing access to our application, we
+would like to have more than one instance or POD running at the same time. That
+way if one fails we still have our application running on the other one. The replication
+controller helps us run multiple instances of a single POD in the kubernetes cluster
+thus providing High Availability. 
 
-Users will no longer be able to access our application. To prevent 
-users from losing access to our application we would have multiple
-instance or POD of same application thus this provide high availibilty
-and scalability
+Reason 2
+we need replication controller is to create multiple PODs to share the
+load across them.
+For example, in this simple scenario we have a single POD serving
+a set of users. When the number of users increase we deploy additional POD to
+balance the load across the two pods. If the demand further increases and If we
+were to run out of resources on the first node, we could deploy additional PODs
+across other nodes in the cluster. As you can see, the replication controller spans
+across multiple nodes in the cluster. It helps us balance the load across multiple pods
+on different nodes as well as scale our application when the demand increases.
 
-Now what if it for some reason we have a single pod it fail
-the RController will help to bring back it alive
 
-Other Reason we need it for Load balanceing and Scalaing
+For example
+
+apiVersion: v1
+Kind: ReplicationController
+metadata: 
+    name: myapp-rc
+    labels:
+        app: myapp
+        type: front-end
+spec:   # spec for Replication Center
+    - template: # every template is a new POD
+        metadata: 
+         name: myapp-pod
+         labels:
+            app: myapp
+            type: front-end
+        spec: 
+            containers: 
+            - name: nginx-container
+              image: nginx
+       - replicas: 3        
+       
+       
+  ReplicaSet
+  
+  
+  apiVersion: v1
+Kind: ReplicaSet
+metadata: 
+    name: myapp-replicaset
+    labels:
+        app: myapp
+        type: front-end
+spec:   # spec for Replica Set
+    - template: # every template is a new POD
+        metadata: 
+         name: myapp-pod
+         labels:
+            app: myapp
+            type: front-end
+        spec: 
+            containers: 
+            - name: nginx-container
+              image: nginx
+      replicas: 3    
+      selector:
+        matchLabels:
+            type: front-end
 
 
