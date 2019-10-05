@@ -1,0 +1,15 @@
+Q:Why we need replica
+A:Let's assume that we have a single POD running our application.
+What if for some reason our application crashes and the POD fails?
+
+Users will no longer be able to access our application. To prevent 
+users from losing access to our application we would have multiple
+instance or POD of same application thus this provide high availibilty
+and scalability
+
+Now what if it for some reason we have a single pod it fail
+the RController will help to bring back it alive
+
+Other Reason we need it for Load balanceing and Scalaing
+
+
