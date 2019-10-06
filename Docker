@@ -1,0 +1,80 @@
+Docker 
+
+Why use Docker?
+
+Docker makes it  really easy to install and run software without worrying about setup or dependencies
+
+What is Docker?
+It is a platform or ecosystem around creating and running containers
+
+What is Image?
+It is a single file with all the dependencies and configuration required to run a program
+
+What is Container?
+It is  Instance of an Image which Runs a program.
+
+Can't get any of this please explain .....
+Let's take example by running below docker command
+
+docker run hello-world
+
+This command meant that we wants to start a new container using image hello-world
+what happened here
+
+1. Started Docker CLI
+2. Give this Command to Docker Server
+3. Docker server if its has a local copy in image cache if not present it reach out to docker hub
+4. from docker hub it download image 
+5. store image locally in image cache
+6. after getting image docker server run the instance of image or create container out of it
+
+ Container is a set of process with a group of assigned resources
+ 
+DOCKER Run
+
+docker run image_iname
+
+1. Image gets into container assigned hard drive
+2. then we execute command into running process of container
+   ==============================================
+   Docker ps - specifically show running container
+   ===============================================
+
+docker ps
+
+show list of all container only running one
+It contains following information
+Container_ID, Image, Command, Created Status, Ports
+
+
+docker run = docker create + docker start
+
+Difference b/w create and start a container:
+
+Create container - it just placing the snapshot of image in hard disk
+to actually Start Container-  we execute the start up command and put it in running process
+
+Docker start vs docker run
+by default docker run show you all logs
+but docker start not show you this logs
+
+docker system prune
+======================
+delete all thing even cache 
+
+Stop a Container 
+docker stop container_id
+=======================
+kill a Container 
+docker kill container_id
+=========================
+Whats difference between the two
+
+stop ->SIGTERM (message to terminate)->Container (it means it tell the container shut down 
+at your own time when you are comfortable )->stop process inside container and release resources
+
+Kill -> SIGKILL->Container->(it means shut down right now )
+
+docker stop has only 10 seconds to close container if its 
+fails the job would be delegated to docker kill
+
