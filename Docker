@@ -78,3 +78,4 @@ Kill -> SIGKILL->Container->(it means shut down right now )
 docker stop has only 10 seconds to close container if its 
 fails the job would be delegated to docker kill
 
+What is MultiCommand Containers?
