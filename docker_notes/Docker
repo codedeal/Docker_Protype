@@ -12,6 +12,7 @@ It is a single file with all the dependencies and configuration required to run 
 
 What is Container?
 It is  Instance of an Image which Runs a program.
+![alt text](https://github.com/codedeal/Docker_Protype/blob/master/Images/container_dig.png)
 
 Can't get any of this please explain .....
 Let's take example by running below docker command
