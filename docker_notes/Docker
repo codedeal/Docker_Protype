@@ -12,7 +12,9 @@ It is a single file with all the dependencies and configuration required to run 
 
 What is Container?
 It is  Instance of an Image which Runs a program.
-![alt text](https://github.com/codedeal/Docker_Protype/blob/master/Images/container_dig.png)
+
+Container = {Running Program or Programs (instance of image)}+ Kernel of OS on which docker is installed
++ Resources of your OS system - {Hard disk,Network,RAM,CPU}
 
 Can't get any of this please explain .....
 Let's take example by running below docker command
@@ -79,4 +81,18 @@ Kill -> SIGKILL->Container->(it means shut down right now )
 docker stop has only 10 seconds to close container if its 
 fails the job would be delegated to docker kill
 
-What is MultiCommand Containers?
+What we need MultiCommand Containers?
+There would be many conditions where you run a single instance of docker container
+and have to interact with with it to perform set of operations but when you open 
+other terminal/cmd you didn’t able to do so as program outside container can’t interact 
+with instance of container for example Skype of your system can’t interact with a docker container which is running ubuntu
+that’s reason we need multiple container
+
+outside application can't -> interact directly with application running in docker container
+To make it happen run below command
+
+docker exec -it  container_id <command> 
+========================================
+exec - execute
+-it - interactive
+<command> - command you want to be executed on the container
