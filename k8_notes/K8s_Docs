@@ -403,9 +403,9 @@ spec:
         - targetPort: 80
           port: 80
           nodePort: 300008
-    selector:
-        app: myapp
-        type: front-end
+    selector: #here this part gives information to service which pod it has to target
+        app: myapp #it is the name of target pod
+        type: front-end #it is type of target pod
 
 In the spec section of a service we have type and ports. The type refers to
 the type of service we are creating. As discussed before it could be ClusterIP,
