@@ -1,0 +1,67 @@
+Enviroment Variable in K8s
+When you create a Pod, you can set environment variables for the containers 
+that run in the Pod. To set environment variables, include the env or envFrom field 
+in the configuration file.
+
+To use this use "env" property which is an array 
+===================================================
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: simple-webapp-color
+  labels:
+    app: simple-webapp-color
+spec: 
+  containers:
+    - name: simple-webapp-color
+      image: mmumshad/simple-webapp-color
+      ports:
+        - containerPort: 8080
+      env:  
+       - name: APP_COLOR
+         value: pink
+
+The other way to env to use a config map file or secrets
+Q: Ok I get it but why we need a configmap file anyways?
+A: Your Pod may needs some default configuration settings before it run, 
+but in some cases these env varibales become too much to handle so it's 
+better practice to keep them or define them seperately.
+
+Q:how You do that 
+A: Simple just create a config map file
+config_map def.yml
+======================================================
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: app_config_map
+data: 
+  APP_COLOR: blue
+  APP_MODE: prod
+========================================================
+
+Commands to deal with it
+kubectl create/apply -f config_map.yml
+kubectl get configmaps
+kubectl describe configmaps
+
+Q: how to use it in pod 
+
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: simple-webapp-color
+  labels:
+    app: simple-webapp-color
+spec: 
+  containers:
+    - name: simple-webapp-color
+      image: mmumshad/simple-webapp-color
+      ports:
+        - containerPort: 8080
+      envFrom:  
+       - configMapRef: 
+              name: app_config
+
+  
+
