@@ -358,6 +358,7 @@ kubectl rollout status deployment/myapp-replicaset # it show the status of deplo
 completed or still some of them need to be deployed
 kubectl rollout history deployment/myapp-replicaset 
 ======================================================================================
+
 Services:
 Sets up networking in k8s cluster.
 
@@ -399,7 +400,7 @@ metadata:
   name: myapp-service
 spec: 
     type: NodePort
-    ports:
+    ports: 
         - targetPort: 80
           port: 80
           nodePort: 300008
@@ -407,6 +408,17 @@ spec:
         app: myapp #it is the name of target pod
         type: front-end #it is type of target pod
 
+# Note that it Route service traffic to pods with label keys and values matching this selector
+Now, in order to match with the pod label, you require to have the exact, key and value pair
+ports:  It’s a ServicePort array. The list of ports that are exposed by this service
+ -targetPort:
+ 
+  port: The port that will be exposed by this service. It’s the internal port on which service is exposed.
+  
+  nodePort:The port that will be available outside K8s cluster. Service is available on this port on the node.
+  This setting makes the service visible outside the Kubernetes
+  cluster by the node’s IP address and the port number declared in this property
+  
 In the spec section of a service we have type and ports. The type refers to
 the type of service we are creating. As discussed before it could be ClusterIP,
 NodePort, or LoadBalancer
