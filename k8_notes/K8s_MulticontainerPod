@@ -1,0 +1,45 @@
+As Discussed in earlier section we said that PODS usually have a one-to-one relationship with the
+containers, but, are we restricted to having a single container in a single POD?
+
+A: No a single POD CAN have multiple containers, except for the fact that they are usually not
+multiple containers of the same kind. 
+
+We know that if we want to scale our application up we increase number of pods but many times
+you might have a scenario were you have a helper container (a container with Main one)
+that might be doing some kind of supporting task for our web application such as
+processing a user entered data, processing a file uploaded by the user etc. and you
+want these helper containers to live along side your application container. In that
+case, you CAN have both of these containers part of the same POD, so that when a
+new application container is created, the helper is also created and when it dies the
+helper also dies since they are part of the same POD.The two containers can also
+communicate with each other directly by referring to each other as ‘localhost’ since
+they share the same network namespace. Plus they can easily share the same storage
+space as well.
+
+#Note MultiContianer POD share 1. Network and 2. Storage
+Types Of MultiContainer PODS or design pattern of multi container 
+1. Ambassador
+2. Adapter
+3. SideCar
+
+First One is Side Car
+To create a multi-container pod, add the new container information to the poddefinition file. 
+Remember, the containers section under the spec section in a pod definition file is
+an array and the reason it is an array is to allow multiple containers in
+a single POD.
+=================================================================================
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp
+  labels:
+  name: simple-webapp
+spec:
+  containers:
+  - name: simple-webapp
+    image: simple-webapp
+    ports:
+    - containerPort: 8080
+   - name: log-agent
+     image: log-agent
+===================================================================================
