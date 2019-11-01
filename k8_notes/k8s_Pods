@@ -13,3 +13,10 @@ A Pod can have additional container must it must be not of same kind
 means a helper container
 
 Two contianer talk to each other using network
+
+Updating a POD:
+Once a pod is created you can change its image and pods get reconfigured but you can't change below fields
+on the running pods
+ 1. Name of pod
+ 2. Containers
+ 3.Port on which pod is operating
