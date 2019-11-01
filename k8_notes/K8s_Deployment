@@ -13,3 +13,11 @@ Good for one-off dev purpose                  Monitor the state of each pod, upd
 Rarely used directly in production            Good for dev and prouction both
 
 
+How Deployment Looks
+
+Deployment 
+  contians a POD template:
+               containers: 1
+               name: client
+               port:3000
+               image: multi-worker
