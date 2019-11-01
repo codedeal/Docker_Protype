@@ -1,0 +1,15 @@
+Deployments 
+
+It is used to maintain a set of identical pods, ensuring that they have the correct 
+config and that the right number exits.
+
+Difference b/w POD and Container
+
+POD                                                 Deployment
+Run a single instance of containers            Run a set of identical pods
+
+Good for one-off dev purpose                  Monitor the state of each pod, updating as neccessary
+
+Rarely used directly in production            Good for dev and prouction both
+
+
