@@ -1,0 +1,184 @@
+Volumes – The Theory
+In the Kubernetes world, persistent storage is broken down into two kinds of objects. 
+A Persistent Volume (PV) and a Persistent Volume Claim (PVC). First, lets tackle a Persistent Volume.
+
+Persistent Volumes
+Persistent Volumes are simply a piece of storage in your cluster. 
+Similar to how you have a disk resource in a server, a persistent volume provides storage 
+resources for objects in the cluster. At the most simple terms you can think of
+a PV as a disk drive. It should be noted that this storage resource exists 
+independently from any pods that may consume it. Meaning, that if the pod dies, the storage should remain intact 
+assuming the claim policies are correct. Persistent Volumes are provisioned in two ways, Statically or Dynamically.
+
+Static Volumes – A static PV simply means that some k8s administrator provisioned a persistent volume in the cluster and 
+it’s ready to be consumed by other resources.
+
+Dynamic Volumes – In some circumstances a pod could require a persistent volume that doesn’t exist. 
+In those cases it is possible to have k8s provision the volume as needed if storage classes 
+were configured to demonstrate where the dynamic PVs should be built. This post will focus on static volumes for now.
+
+Persistent Volume Claims
+Pods that need access to persistent storage, obtain that access through the use of a Persistent Volume Claim.
+A PVC, binds a persistent volume to a pod that requested it.
+
+When a pod wants access to a persistent disk, it will request access to the claim which will 
+specify the size , access mode and/or storage classes that it will need from a Persistent Volume. 
+Indirectly the pods get access to the PV, but only through the use of a PVC.
+
+Claim Policies
+We also reference claim policies earlier. A Persistent Volume can have several different 
+claim policies associated with it including:
+
+Retain – When the claim is deleted, the volume remains.
+
+Recycle – When the claim is deleted the volume remains but in a state where the data can be manually recovered.
+
+Delete – The persistent volume is deleted when the claim is deleted.
+
+The claim policy (associated at the PV and not the PVC) is responsible for what happens 
+to the data on when the claim has been deleted.
+
+
+Example
+==========
+First, we’ll start by deploying a persistent volume through a config file.
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysqlvol
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi #Size of the volume
+  accessModes:
+    - ReadWriteOnce #type of access
+  hostPath:
+    path: "/mnt/data" #host location
+    
+    After you deploy your persistent volume, you can view it by running: 1
+          ->-> kubectl get pv
+    Once your claim has been created, we can look for those claims by running:
+          ->-> kubectl get pvc
+          
+    Great, the volume is setup and a claim ready to be used. Now we can deploy our database pod and service. 
+    The database pod will mount the volume via the claim and we’re specifying in our pod code, that the volume 
+    will be mounted in the /var/lib/mysql directory so it can store our database for mysql.    
+    
+    apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: hollowdb 
+  labels: 
+    app: hollowdb
+spec: 
+  replicas: 1 
+  selector: 
+    matchLabels:
+      app: hollowdb
+  strategy:
+    type: Recreate 
+  template: 
+    metadata:
+      labels: 
+        app: hollowdb
+    spec:
+      containers:
+      - name: mysql 
+        image: eshanks16/hollowdb-mysql:v4 
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306 
+        volumeMounts:
+        - name: mysqlstorage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysqlstorage
+        persistentVolumeClaim:
+          claimName: mysqlvol
+---
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: hollowdb 
+spec: 
+  ports: 
+  - name: mysql
+    port: 3306
+    targetPort: 3306
+    protocol: TCP
+  selector: 
+    app: hollowdb
+    
+    
+ And now that we’ve got a working mysql container with persistent storage for the database, we can deploy our app.
+
+NOTE: In this example, my application container, checks to see if there is a database for the app created already. 
+If there is, it will use that database, if there isn’t, it will create a database on the mysql server.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+      app: hollowapp
+  name: hollowapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hollowapp
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: hollowapp
+    spec:
+      containers:
+      - name: hollowapp
+        image: eshanks16/k8s-hollowapp:v5
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: SECRET_KEY
+          value: "my-secret-key"
+        - name: DATABASE_URL
+          valueFrom: 
+            configMapKeyRef:
+              name: hollow-config
+              key: db.string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hollowapp
+  labels:
+    app: hollowapp
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: hollowapp
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: hollowapp
+  labels:
+    app: hollowapp
+spec:
+  rules:
+  - host: hollowapp.hollow.local
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: hollowapp
+          servicePort: 5000
+    
+    for more info : https://theithollow.com/2019/03/04/kubernetes-persistent-volumes/
+    
