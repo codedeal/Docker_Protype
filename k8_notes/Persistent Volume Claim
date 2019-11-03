@@ -42,7 +42,7 @@ to the data on when the claim has been deleted.
 Example
 ==========
 First, we’ll start by deploying a persistent volume through a config file.
-
+=====================================
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -55,7 +55,12 @@ spec:
     - ReadWriteOnce #type of access
   hostPath:
     path: "/mnt/data" #host location
-    
+    ===================================
+    Access Modes
+    1. ReadWriteOnce ->> Can be used by single node
+    2. ReadOnlyMany ->> Multiple node can read from this
+    3. ReadWriteMany->> Can be read and written to by many nodes
+    =============================================================
     After you deploy your persistent volume, you can view it by running: 1
           ->-> kubectl get pv
     Once your claim has been created, we can look for those claims by running:
@@ -64,7 +69,7 @@ spec:
     Great, the volume is setup and a claim ready to be used. Now we can deploy our database pod and service. 
     The database pod will mount the volume via the claim and we’re specifying in our pod code, that the volume 
     will be mounted in the /var/lib/mysql directory so it can store our database for mysql.    
-    
+===================================    
     apiVersion: apps/v1 
 kind: Deployment 
 metadata: 
@@ -110,12 +115,12 @@ spec:
   selector: 
     app: hollowdb
     
-    
+============================    
  And now that we’ve got a working mysql container with persistent storage for the database, we can deploy our app.
 
 NOTE: In this example, my application container, checks to see if there is a database for the app created already. 
 If there is, it will use that database, if there isn’t, it will create a database on the mysql server.
-
+============================
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -179,6 +184,6 @@ spec:
         backend:
           serviceName: hollowapp
           servicePort: 5000
-    
+ ========================================   
     for more info : https://theithollow.com/2019/03/04/kubernetes-persistent-volumes/
     
